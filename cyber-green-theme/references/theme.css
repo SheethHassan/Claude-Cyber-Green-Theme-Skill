@@ -1,0 +1,149 @@
+/*
+ * Cyber Green (the Matrix theme): tokens and look. Scope: <html data-theme="cyber-green">.
+ * Variable names follow shadcn/ui (--background, --primary, ...); rename to the project's own.
+ * Every value was contrast-measured, see SKILL.md. Change a colour or --rain-opacity only with
+ * references/contrast.py to hand.
+ */
+
+[data-theme='cyber-green'] {
+  color-scheme: dark;
+  --radius: 0.25rem;
+
+  --background: #020805;
+  --foreground: #E8FFF2;
+  --card: rgba(3,18,8,.84);               /* dense panel: a glyph can pass behind any of them */
+  --card-foreground: #E8FFF2;
+  --popover: #06180E;
+  --popover-foreground: #E8FFF2;
+  --primary: #39FF88;
+  --primary-foreground: #03120A;
+  --secondary: rgba(255,255,255,.08);
+  --secondary-foreground: #E8FFF2;
+  --muted: rgba(57,255,136,.07);
+  --muted-foreground: #B5D1C2;
+  --accent: rgba(57,255,136,.14);
+  --accent-foreground: #E8FFF2;
+  --destructive: #FCA5A5;
+  --border: rgba(57,255,136,.22);
+  --input: rgba(57,255,136,.28);
+  --ring: #39FF88;
+
+  --link: #7DFFB3;
+  --chart-highlight: #7DFFB3;
+  --chart-1: #7DFFB3;
+  --chart-2: #1FA85A;
+  --chart-3: #9CA3AF;
+  --chart-4: #22D3EE;                      /* cyan, not green: green is the brand */
+  --chart-5: #F59E0B;
+
+  --sidebar: rgba(2,8,5,.86);
+  --sidebar-foreground: #B5D1C2;
+  --sidebar-primary: #39FF88;
+  --sidebar-primary-foreground: #03120A;
+  --sidebar-accent: rgba(57,255,136,.14);
+  --sidebar-accent-foreground: #E8FFF2;
+  --sidebar-border: rgba(57,255,136,.3);
+  --sidebar-ring: #39FF88;
+
+  --glass-edge: rgba(57,255,136,.38);
+  --glass-highlight: rgba(57,255,136,.10);
+
+  /* The rain: head and trail glyph colours, and the canvas layer's opacity (28%: see SKILL.md). */
+  --rain-head: #CFFFE0;
+  --rain-trail: #39FF88;
+  --rain-opacity: 0.28;
+
+  /* Success is ice cyan in this theme, so it never reads as the brand green. */
+  --status-success-text: #A5F3FC;
+  --status-warning-text: #FCD083;
+  --status-error-text: #FCA5A5;
+  --status-success-dot: #22D3EE;
+  --status-warning-dot: #F59E0B;
+  --status-error-dot: #EF4444;
+  --status-success-tint: rgba(34,211,238,.16);
+  --status-warning-tint: rgba(245,158,11,.17);
+  --status-error-tint: rgba(239,68,68,.17);
+  --favourite: #FACC15;
+
+  --matrix-glow: rgba(57, 255, 136, 0.55);
+  --matrix-font: 'Share Tech Mono', 'Noto Sans Arabic', ui-monospace, Consolas, monospace;
+}
+
+/*
+ * Latin letters and digits in monospace; other scripts fall through to the next font in the stack
+ * (Share Tech Mono has no Arabic). One weight only: stop the browser faking a bold over it.
+ * Unlayered, so it beats utility-class fonts such as Tailwind's font-sans.
+ */
+[data-theme='cyber-green'] body,
+[data-theme='cyber-green'] body *:not(svg, svg *) {
+  font-family: var(--matrix-font);
+  font-synthesis-weight: none;
+}
+
+/* The glow: headings, big numbers, the primary button, the current page. Never on red, amber or gold. */
+[data-theme='cyber-green'] h1,
+[data-theme='cyber-green'] h2 {
+  color: var(--primary);
+  text-shadow: 0 0 10px var(--matrix-glow);
+}
+
+[data-theme='cyber-green'] h3 {
+  text-shadow: 0 0 8px rgba(57, 255, 136, 0.35);
+}
+
+/* Bare text on the rain (a page subtitle): a dark halo keeps glyphs from running through the letters.
+   Point the selector at the project's page-header subtitle. */
+[data-theme='cyber-green'] main header p {
+  text-shadow:
+    0 0 3px var(--background),
+    0 0 8px var(--background);
+}
+
+/* Map to the project's primary button / current nav item. */
+[data-theme='cyber-green'] .bg-primary {
+  box-shadow: 0 0 14px var(--matrix-glow);
+}
+
+[data-theme='cyber-green'] [aria-current='page'] {
+  text-shadow: 0 0 8px var(--matrix-glow);
+}
+
+/* Panels: a faint green inner line and a soft outer glow. */
+[data-theme='cyber-green'] .panel {
+  background: var(--card);
+  border: 1px solid var(--glass-edge);
+  box-shadow:
+    inset 0 0 0 1px rgba(57, 255, 136, 0.05),
+    0 0 18px -8px rgba(57, 255, 136, 0.3);
+}
+
+/* The rain's layer: fixed, behind everything, no clicks. rain.js draws into the canvas inside it. */
+[data-theme='cyber-green'] .matrix-rain {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+  overflow: hidden;
+  background: var(--background);
+}
+
+[data-theme='cyber-green'] .matrix-rain canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: var(--rain-opacity);
+}
+
+/* Scanlines and a vignette over the whole window: the only gradients in the theme. They sit above
+   everything (dialogs too) and take no clicks. */
+[data-theme='cyber-green']::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0) 0 2px, rgba(0, 0, 0, 0.16) 2px 3px),
+    radial-gradient(ellipse at center, rgba(0, 0, 0, 0) 60%, rgba(0, 0, 0, 0.4) 100%);
+}
